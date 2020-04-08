@@ -180,6 +180,7 @@ object ClusterConfig {
 
   def validateZkHosts(zkHosts: String): Unit = {
     require(zkHosts.length > 0, "cluster zk hosts is illegal, can't be empty!")
+    require(zkHosts.contains(":"), "cluster zk hosts is illegal, should contain colon!")
   }
 
   def apply(name: String
@@ -485,7 +486,7 @@ case object PLAINTEXT extends SecurityProtocol {
 object SecurityProtocol {
   private[this] val typesMap: Map[String, SecurityProtocol] = Map(
     SASL_PLAINTEXT.stringId -> SASL_PLAINTEXT
-    , PLAINTEXTSASL.stringId -> SASL_PLAINTEXT
+    , PLAINTEXTSASL.stringId -> PLAINTEXTSASL
     , SASL_SSL.stringId -> SASL_SSL
     , SSL.stringId -> SSL
     , PLAINTEXT.stringId -> PLAINTEXT

@@ -144,6 +144,7 @@ LDAP support is through the basic authentication filter.
 - basicAuthentication.ldap.search-filter=< LDAP search filter>
 - basicAuthentication.ldap.connection-pool-size=< number of connection to LDAP server>
 - basicAuthentication.ldap.ssl=< Boolean flag to enable/disable LDAPS>
+- basicAuthentication.ldap.ssl-trust-all=< Boolean flag to allow non-expired invalid certificates>
 
 4. (Optional) Limit access to a specific LDAP Group
 - basicAuthentication.ldap.group-filter=< LDAP group filter>
@@ -160,6 +161,7 @@ LDAP support is through the basic authentication filter.
 - basicAuthentication.ldap.group-filter="cn=allowed-group,ou=groups,dc=example,dc=com"
 - basicAuthentication.ldap.connection-pool-size=10
 - basicAuthentication.ldap.ssl=false
+- basicAuthentication.ldap.ssl-trust-all=false
 
 
 Deployment
