@@ -144,10 +144,10 @@ LDAP support is through the basic authentication filter.
 - basicAuthentication.ldap.search-filter=< LDAP search filter>
 - basicAuthentication.ldap.connection-pool-size=< number of connection to LDAP server>
 - basicAuthentication.ldap.ssl=< Boolean flag to enable/disable LDAPS>
-- basicAuthentication.ldap.ssl-trust-all=< Boolean flag to allow non-expired invalid certificates>
 
 4. (Optional) Limit access to a specific LDAP Group
 - basicAuthentication.ldap.group-filter=< LDAP group filter>
+- basicAuthentication.ldap.ssl-trust-all=< Boolean flag to allow non-expired invalid certificates>
 
 #### Example (Online LDAP Test Server):
 
@@ -206,11 +206,24 @@ add the -java-home option as follows:
 Starting the service with Security
 ----------------------------------
 
-To add JAAS configuration for SASL, add the config file location at start:
+This can be done in 2 ways:
+1. If all clusters use the same JAAS configuration for SASL, then we can add the config file location at start:
 
-    $ bin/cmak -Djava.security.auth.login.config=/path/to/my-jaas.conf
+    $ bin/cmak -Djava.security.krb5.conf=/etc/krb5.conf -Djava.security.auth.login.config=/path/to/my-jaas.conf
 
-NOTE: Make sure the user running CMAK (pka kafka manager) has read permissions on the jaas config file
+1. **Preferred way**: Otherwise, we can specify the configuration individually for each cluster.
+   - Start using:    
+         
+         $ bin/cmak -Djava.security.krb5.conf=/etc/krb5.conf
+   
+   - Configure cluster using:
+    
+         Security Protocol: SASL_PLAINTEXT
+         SASL JAAS Config (only applies to SASL based security): com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true keyTab="/path/to/kafka.service.keytab" storeKey=true useTicketCache=false serviceName="kafka" principal="kafka/hostname.fqdn@FQDN";
+
+**NOTE**:
+- Make sure the user running CMAK (pka kafka manager) has read permissions on the jaas config file
+- Remember to specify `-Djava.security.krb5.conf` option with `krb5.conf` file location while running the CMAK.
 
 
 Packaging
@@ -247,4 +260,3 @@ Migration from Kafka Manager to CMAK
 
 1. Copy config files from old version to new version (application.conf, consumer.properties)
 2. Change start script to use bin/cmak instead of bin/kafka-manager
-
